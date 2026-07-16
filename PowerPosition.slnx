@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PowerPosition.Worker/PowerPosition.Worker.csproj" />
+  <Project Path="PowerPosition.Tests/PowerPosition.Tests.csproj" />
+</Solution>
