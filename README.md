@@ -1,12 +1,8 @@
-# PowerPosition
+# Coding Challenge: Power Position report
 
-## Overview Requirements
-The power traders require an intra-day report to give them their day ahead power position. The report should output the aggregated volume per hour to a CSV file based upon a configurable schedule. See full [requirements](https://github.com/DmitriyVetrov/powerservice-challenge/blob/main/docs/requirements.md).
+## Overview Requirements 
 
-Intra-day day-ahead power position report — a .NET 10 worker service. On a
-configurable interval (and once at startup) it fetches the day-ahead trades from
-the trading system, aggregates volume per hour, and writes a CSV named
-`PowerPosition_yyyyMMdd_HHmm.csv` (local time of extract).
+**Intra-day Day-Ahead Power Position Report** — Developed a .NET 10 Worker Service that generates automated day-ahead power position reports for energy traders. The service runs on a configurable schedule (and once at startup), retrieves day-ahead trades from the trading system, aggregates power volumes by delivery hour, and exports the results to CSV files `PowerPosition_yyyyMMdd_HHmm.csv` using the local extraction time. Implemented configurable scheduling, background processing, dependency injection, logging, and robust error handling to ensure reliable automated report generation. See full [requirements](https://github.com/DmitriyVetrov/powerservice-challenge/blob/main/docs/requirements.md)
 
 ## Build
 
