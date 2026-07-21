@@ -1,5 +1,8 @@
 # PowerPosition
 
+## Overview Requirements
+The power traders require an intra-day report to give them their day ahead power position. The report should output the aggregated volume per hour to a CSV file based upon a configurable schedule. See full [requirements](https://github.com/DmitriyVetrov/powerservice-challenge/blob/main/docs/requirements.md).
+
 Intra-day day-ahead power position report — a .NET 10 worker service. On a
 configurable interval (and once at startup) it fetches the day-ahead trades from
 the trading system, aggregates volume per hour, and writes a CSV named
