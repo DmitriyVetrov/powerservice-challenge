@@ -1,13 +1,27 @@
 using PowerPosition.Web.Components;
+using PowerPosition.Web.Configuration;
+using PowerPosition.Web.Reports;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorComponents();
+// The Home page selects reports without a page reload, so it needs an interactive circuit.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+
+builder.Services
+    .AddOptions<ReportOptions>()
+    .Bind(builder.Configuration.GetSection(ReportOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services.AddSingleton<ICsvReportParser, CsvReportParser>();
+builder.Services.AddSingleton<IReportCatalog, ReportCatalog>();
 
 var app = builder.Build();
 
 app.UseAntiforgery();
 app.MapStaticAssets();
-app.MapRazorComponents<App>();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.Run();

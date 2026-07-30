@@ -2,11 +2,11 @@
 
   <ItemGroup>
     <PackageReference Include="Markdig" Version="1.3.2" />
+    <PackageReference Include="Plotly.Blazor" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- One authored copy in /docs; embedding ships it with the app, in dev and when published. -->
-    <EmbeddedResource Include="..\docs\requirements.md" LogicalName="PowerPosition.Web.requirements.md" />
-  </ItemGroup>
+    <EmbeddedResource Include="..\docs\requirements.md" LogicalName="PowerPosition.Web.requirements.md" />  </ItemGroup>
 
 </Project>

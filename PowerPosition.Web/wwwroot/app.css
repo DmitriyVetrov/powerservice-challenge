@@ -64,3 +64,121 @@ td {
     border: 1px solid #dfe1e6;
     padding: 0.3rem 0.7rem;
 }
+
+/* --- Report browser ------------------------------------------------------ */
+
+/* 60rem is a reading width; the dashboard needs the room, the prose pages don't. */
+main:has(.dashboard) {
+    max-width: 82rem;
+}
+
+.dashboard {
+    align-items: stretch;
+    display: grid;
+    gap: 1.5rem;
+    /* Wide enough to hold a PowerPosition_yyyyMMdd_HHmm.csv name on one line. */
+    grid-template-columns: 21rem minmax(0, 1fr);
+}
+
+@media (max-width: 52rem) {
+    .dashboard {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.report-panel,
+.chart-panel {
+    background-color: #ffffff;
+    border: 1px solid #dfe1e6;
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+}
+
+.chart-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: min(70vh, 34rem);
+}
+
+.panel-heading {
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+}
+
+/* A file name is not a label — leave its casing alone. */
+.panel-heading.file-name {
+    letter-spacing: normal;
+    overflow-wrap: anywhere;
+    text-transform: none;
+}
+
+.panel-empty,
+.panel-placeholder {
+    color: #52514e;
+}
+
+/* Centred both ways, so it reads as "nothing selected yet" rather than as content. */
+.panel-placeholder {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+}
+
+.report-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.report-item {
+    background: none;
+    border: 0;
+    border-radius: 4px;
+    color: inherit;
+    cursor: pointer;
+    display: block;
+    font: inherit;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    width: 100%;
+}
+
+.report-item:hover {
+    background-color: #f4f5f7;
+}
+
+.report-item.selected {
+    background-color: #14212e;
+    color: #ffffff;
+}
+
+.report-name {
+    display: block;
+    /* Only breaks if a name really is too long for the column. */
+    overflow-wrap: anywhere;
+}
+
+.report-meta {
+    color: #898781;
+    display: block;
+    font-size: 0.8rem;
+}
+
+.report-item.selected .report-meta {
+    color: #a8b6c4;
+}
+
+/* The plot sizes itself to this box; without a height it would collapse to nothing. */
+.chart-area {
+    flex: 1;
+    min-height: 24rem;
+}
+
+.chart {
+    height: 100%;
+    width: 100%;
+}

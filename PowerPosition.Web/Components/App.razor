@@ -15,6 +15,10 @@
             <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
         </Found>
     </Router>
+
+    <!-- Starts the interactive circuit the Home page needs. Plotly.Blazor loads plotly.js itself
+         from its own static web assets, so there is no second script tag here. -->
+    <script src="_framework/blazor.web.js"></script>
 </body>
 
 </html>

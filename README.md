@@ -65,7 +65,7 @@ A Blazor app (`PowerPosition.Web`) with a top navigation bar over three pages:
 
 | Page | Route | Contents |
 |---|---|---|
-| Home | `/` | Placeholder. |
+| Home | `/` | Report browser — the worker's CSV extracts, plotted (see [Reading the extracts](#reading-the-extracts)). |
 | Requirements | `/requirements` | `docs/requirements.md`, rendered to HTML with [Markdig](https://github.com/xoofx/markdig). |
 | About Me | `/about-me` | Placeholder — the CV is added later. |
 
@@ -78,15 +78,46 @@ assembly from `docs/requirements.md` at build time (see the csproj), so there is
 one authored copy and it works both from `dotnet run` and from a published
 build.
 
-At this stage the site is the application shell only — it does not read the
-worker's CSV extracts.
+Requirements and About Me are rendered on the server as static HTML. Home is the
+one interactive component (`@rendermode InteractiveServer`), because selecting a
+report must swap the chart without reloading the page.
 
-The pages are rendered on the server as static HTML: there is no interactive
-circuit, so the app ships no client-side Blazor script. When report loading
-needs interactivity, re-enable it with `AddInteractiveServerComponents()` and
-`AddInteractiveServerRenderMode()` in `Program.cs`, a `blazor.web.js` script tag
-in `App.razor`, and `@rendermode InteractiveServer` on the components that need
+### Reading the extracts
+
+The Home page is split into two panels: the CSV files found in the extract
+folder on the left, the selected one as a chart on the right. Until you pick one
+the right panel shows a placeholder.
+
+| Key | Default | Meaning |
+|---|---|---|
+| `Extract:OutputPath` | `../PowerPosition.Worker/reports` | Folder the reports are read from. Relative to the current directory. |
+
+The web app reads the same `Extract:OutputPath` key as the worker, so the two
+line up out of the box: run the worker once with its defaults, then start the
+site and its extracts are there. Override it the same way as the worker's
+settings — the site does not have to live next to the worker:
+
+```
+dotnet run --project PowerPosition.Web -- --Extract:OutputPath /var/lib/power-position/reports
+```
+
+Nothing depends on the `PowerPosition_yyyyMMdd_HHmm.csv` naming beyond showing
+it in the list: the folder is scanned for `*.csv` and ordered by write time, so
+any CSV with the right shape plots. That shape is a time column followed by one
+or more value columns — every column after the first becomes its own line, named
+after its header, so a wider CSV plots as several series without a code change.
+
+The CSV stores only wall-clock `HH:mm` and a day-ahead trading day runs 23:00 →
+22:00, so the parser rebuilds the time axis by rolling the date forward each
+time the clock wraps past midnight. A file whose times never wrap plots on a
+single day; the repeated hour on a DST fall-back day is kept as the file records
 it.
+
+Charts are [Plotly.Blazor](https://github.com/LayTec-AG/Plotly.Blazor) — zoom by
+dragging, pan and reset from the mode bar (or double-click to reset), hover for
+the period and its value, and the plot resizes with the window. The package
+carries its own copy of plotly.js as a static web asset, so there is no CDN or
+extra script tag.
 
 ## Logs
 

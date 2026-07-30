@@ -1,0 +1,152 @@
+@* Right panel: the selected report as an interactive Plotly line chart. *@
+@using Plotly.Blazor.LayoutLib
+@using Plotly.Blazor.Traces.ScatterLib
+
+<PlotlyChart @bind-Config="config" @bind-Layout="layout" @bind-Data="data" @ref="chart" class="chart" />
+
+@code {
+    /// <summary>
+    /// Categorical series colours, assigned by slot in this fixed order and never cycled.
+    /// </summary>
+    /// <remarks>
+    /// A validated colourblind-safe ordering: every adjacent pair clears the CVD and normal-vision
+    /// separation floors against a white surface. Slots 3–5 sit below 3:1 contrast on white, so once
+    /// a report has that many series the legend below (colour chip beside the series name in text ink)
+    /// is what carries identity — never the hue alone.
+    /// </remarks>
+    private static readonly string[] Palette =
+    [
+        "#2a78d6", // blue
+        "#eb6834", // orange
+        "#1baf7a", // aqua
+        "#eda100", // yellow
+        "#e87ba4", // magenta
+        "#008300"  // green
+    ];
+
+    private const string Grid = "#e8eaed";
+    private const string Axis = "#c3c2b7";
+    private const string Ink = "#52514e";
+
+    private PlotlyChart? chart;
+
+    // Mutated in place rather than reassigned: PlotlyChart holds this same reference, so clearing and
+    // refilling it is what lets React() redraw with the new report. (Not readonly — @bind-Data
+    // generates a setter for it.)
+    private IList<ITrace> data = new List<ITrace>();
+
+    private Config config = new()
+    {
+        Responsive = true,   // redraws to fit its container when the window resizes
+        ScrollZoom = Plotly.Blazor.ConfigLib.ScrollZoomFlag.Cartesian,
+        DisplayLogo = false,
+        // Plotly's "double-click to zoom back out" toast is positioned outside the panel and
+        // overlaps the page. The mode bar's autoscale and reset-axes buttons say the same thing.
+        ShowTips = false
+    };
+
+    private Layout layout = new()
+    {
+        PaperBgColor = "#ffffff",
+        PlotBgColor = "#ffffff",
+        AutoSize = true,
+        Margin = new Margin { L = 64, R = 24, T = 16, B = 48 },
+        // Hover by x, not by proximity: anywhere over the plot reads out the period under the
+        // cursor. "Closest" would only respond within ~20px of the line itself, which on a chart
+        // this wide means most of the panel is dead to the mouse.
+        HoverMode = HoverModeEnum.X,
+        HoverDistance = -1,
+        HoverLabel = new Plotly.Blazor.LayoutLib.HoverLabel { BgColor = "#ffffff", BorderColor = Axis },
+        ShowLegend = false,
+        Font = new Plotly.Blazor.LayoutLib.Font { Color = Ink, Size = 12 },
+        XAxis =
+        [
+            new XAxis
+            {
+                Type = Plotly.Blazor.LayoutLib.XAxisLib.TypeEnum.Date,
+                TickFormat = "%H:%M",
+                GridColor = Grid,
+                LineColor = Axis,
+                ShowLine = true,
+                ZeroLine = false,
+                ShowSpikes = true,
+                SpikeColor = Axis,
+                SpikeThickness = 1,
+                SpikeDash = "dot",
+                SpikeMode = Plotly.Blazor.LayoutLib.XAxisLib.SpikeModeFlag.Across
+            }
+        ],
+        YAxis =
+        [
+            new YAxis
+            {
+                GridColor = Grid,
+                LineColor = Axis,
+                ZeroLine = true,
+                ZeroLineColor = Axis
+            }
+        ]
+    };
+
+    /// <summary>Report to plot.</summary>
+    [Parameter, EditorRequired]
+    public ReportData Report { get; set; } = default!;
+
+    /// <summary>File name currently drawn, so re-renders that change nothing skip the interop round trip.</summary>
+    private string? plotted;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.Equals(plotted, Report.FileName, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        plotted = Report.FileName;
+        Rebuild();
+
+        // Null on the very first pass — the chart has not rendered yet, so it will pick the
+        // traces up itself. Afterwards this is what swaps the data in without recreating the plot.
+        if (chart is not null)
+        {
+            await chart.React();
+        }
+    }
+
+    private void Rebuild()
+    {
+        data.Clear();
+
+        // One trace per series, driven entirely by what the CSV contained.
+        var x = Report.Timestamps.Cast<object>().ToList();
+
+        for (var i = 0; i < Report.Series.Count; i++)
+        {
+            var series = Report.Series[i];
+
+            data.Add(new Scatter
+            {
+                Name = series.Name,
+                Mode = ModeFlag.Lines, // no point markers: at a few thousand points they only add noise
+                X = x,
+                Y = series.Values.Cast<object>().ToList(),
+                Line = new Plotly.Blazor.Traces.ScatterLib.Line
+                {
+                    Color = Palette[i % Palette.Length],
+                    Width = 2,
+                    Shape = Plotly.Blazor.Traces.ScatterLib.LineLib.ShapeEnum.Linear
+                },
+                // x is a real instant, so %H:%M reproduces the CSV's own "Local Time" label.
+                HoverTemplate = $"<b>{series.Name}</b><br>%{{x|%H:%M}}<br>%{{y:,.3f}}<extra></extra>"
+            });
+        }
+
+        // A lone series is named by the axis title; a legend box would just repeat it. With more than
+        // one, the legend is the non-colour channel that tells them apart.
+        layout.ShowLegend = Report.Series.Count > 1;
+        layout.YAxis[0].Title = new Plotly.Blazor.LayoutLib.YAxisLib.Title
+        {
+            Text = Report.Series.Count == 1 ? Report.Series[0].Name : null
+        };
+    }
+}

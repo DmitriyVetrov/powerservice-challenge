@@ -1,0 +1,49 @@
+@* Left panel: the reports found in the extract folder. Presentation only — the page owns the state. *@
+
+<section class="report-panel">
+    <h2 class="panel-heading">Reports</h2>
+
+    @if (Files.Count == 0)
+    {
+        <p class="panel-empty">
+            No reports found in <code>@EmptyPath</code>. Run the worker to produce some.
+        </p>
+    }
+    else
+    {
+        <ul class="report-list">
+            @foreach (var file in Files)
+            {
+                var isSelected = string.Equals(file.Name, SelectedName, StringComparison.Ordinal);
+                <li>
+                    @* A button, not a link: selecting a report must not navigate. *@
+                    <button type="button"
+                            class="report-item @(isSelected ? "selected" : null)"
+                            aria-current="@(isSelected ? "true" : null)"
+                            @onclick="() => OnSelect.InvokeAsync(file.Name)">
+                        <span class="report-name">@file.Name</span>
+                        <span class="report-meta">@file.ModifiedUtc.ToLocalTime().ToString("dd MMM yyyy HH:mm")</span>
+                    </button>
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+@code {
+    /// <summary>Reports to list, in display order.</summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<ReportFile> Files { get; set; } = [];
+
+    /// <summary>File name of the currently selected report, if any.</summary>
+    [Parameter]
+    public string? SelectedName { get; set; }
+
+    /// <summary>Raised with the file name when the user picks a report.</summary>
+    [Parameter]
+    public EventCallback<string> OnSelect { get; set; }
+
+    /// <summary>Folder shown in the empty-state message.</summary>
+    [Parameter, EditorRequired]
+    public string EmptyPath { get; set; } = string.Empty;
+}

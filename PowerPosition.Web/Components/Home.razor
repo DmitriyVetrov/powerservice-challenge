@@ -1,10 +1,56 @@
 @page "/"
+@rendermode InteractiveServer
+@inject IReportCatalog Catalog
+@inject ILogger<Home> Logger
 
 <PageTitle>Home · PowerPosition</PageTitle>
 
-<h1>PowerPosition</h1>
+<div class="dashboard">
+    <ReportList Files="files" SelectedName="selected" EmptyPath="Catalog.RootPath" OnSelect="SelectAsync" />
 
-<p>
-    Intra-day day-ahead power position reporting. Placeholder — loading and viewing the worker's
-    <code>PowerPosition_yyyyMMdd_HHmm.csv</code> extracts comes in a later stage.
-</p>
+    <section class="chart-panel">
+        @if (report is not null)
+        {
+            <h2 class="panel-heading file-name">@report.FileName</h2>
+            <div class="chart-area">
+                <ReportChart Report="report" />
+            </div>
+        }
+        else
+        {
+            <div class="panel-placeholder">
+                <p>@(error ?? "Select a report from the left to plot it.")</p>
+            </div>
+        }
+    </section>
+</div>
+
+@code {
+    private IReadOnlyList<ReportFile> files = [];
+    private string? selected;
+    private ReportData? report;
+    private string? error;
+
+    protected override void OnInitialized() => files = Catalog.List();
+
+    private async Task SelectAsync(string name)
+    {
+        selected = name;
+        report = null;
+        error = null;
+
+        try
+        {
+            report = await Catalog.LoadAsync(name, CancellationToken.None);
+        }
+        catch (Exception ex) when (ex is FormatException or IOException or UnauthorizedAccessException)
+        {
+            // A bad or vanished file costs you that report, not the page.
+            Logger.LogWarning(ex, "Could not load report {Report}.", name);
+            error = $"{name} could not be read: {ex.Message}";
+
+            // It may have been deleted since the list was built, so refresh what we show.
+            files = Catalog.List();
+        }
+    }
+}
