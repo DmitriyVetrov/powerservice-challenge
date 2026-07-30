@@ -2,9 +2,14 @@
 
 > ### 🚀 Blazor Server web application
 >
-> A **Blazor Server web application** for this challenge lives in a separate branch:
+> A **Blazor Server web application** (`PowerPosition.Web`) for this challenge lives in a separate branch:
 > **[`feature/blazor-frontend`](https://github.com/DmitriyVetrov/powerservice-challenge/tree/feature/blazor-frontend)**.
-> It adds a web UI on top of the worker service — check it out there.
+>
+> It is a read-only viewer for the reports this worker produces: it lists the CSV files found in the
+> worker's `Extract:OutputPath` folder, newest first, and plots the selected one as an interactive
+> Plotly line chart. Two extra pages render the project's Markdown docs (requirements and a CV) as
+> embedded content. It does not run the worker, trigger extracts, or write anything — the worker
+> stays the only producer of the CSVs.
 
 ## Overview Requirements 
 
