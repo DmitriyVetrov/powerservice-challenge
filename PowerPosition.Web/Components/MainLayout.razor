@@ -1,0 +1,13 @@
+@inherits LayoutComponentBase
+
+@* NavLink marks the entry matching the current URL with the "active" class. *@
+<header>
+    <a class="brand" href="">⚡ PowerPosition</a>
+    <nav>
+        <NavLink href="" Match="NavLinkMatch.All">Home</NavLink>
+        <NavLink href="requirements">Requirements</NavLink>
+        <NavLink href="about-me">About Me</NavLink>
+    </nav>
+</header>
+
+<main>@Body</main>

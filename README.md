@@ -5,6 +5,12 @@ configurable interval (and once at startup) it fetches the day-ahead trades from
 the trading system, aggregates volume per hour, and writes a CSV named
 `PowerPosition_yyyyMMdd_HHmm.csv` (local time of extract).
 
+| Project | What it is |
+|---|---|
+| `PowerPosition.Worker` | The extract worker service. |
+| `PowerPosition.Web` | Blazor Server front end (see [Web front end](#web-front-end)). |
+| `PowerPosition.Tests` | xUnit tests for the worker. |
+
 ## Build
 
 ```
@@ -52,6 +58,35 @@ Published build — same flags, no `--` separator:
 dotnet publish PowerPosition.Worker -o out
 ./out/PowerPosition.Worker --Extract:IntervalMinutes 5 --Extract:OutputPath ./reports-prod
 ```
+
+## Web front end
+
+A Blazor app (`PowerPosition.Web`) with a top navigation bar over three pages:
+
+| Page | Route | Contents |
+|---|---|---|
+| Home | `/` | Placeholder. |
+| Requirements | `/requirements` | `docs/requirements.md`, rendered to HTML with [Markdig](https://github.com/xoofx/markdig). |
+| About Me | `/about-me` | Placeholder — the CV is added later. |
+
+```
+dotnet run --project PowerPosition.Web
+```
+
+Then open http://localhost:5195. The requirements document is embedded into the
+assembly from `docs/requirements.md` at build time (see the csproj), so there is
+one authored copy and it works both from `dotnet run` and from a published
+build.
+
+At this stage the site is the application shell only — it does not read the
+worker's CSV extracts.
+
+The pages are rendered on the server as static HTML: there is no interactive
+circuit, so the app ships no client-side Blazor script. When report loading
+needs interactivity, re-enable it with `AddInteractiveServerComponents()` and
+`AddInteractiveServerRenderMode()` in `Program.cs`, a `blazor.web.js` script tag
+in `App.razor`, and `@rendermode InteractiveServer` on the components that need
+it.
 
 ## Logs
 
