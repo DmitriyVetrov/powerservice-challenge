@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PowerPosition.Worker\PowerPosition.Worker.csproj" />
+    <ProjectReference Include="..\PowerPosition.Web\PowerPosition.Web.csproj" />
   </ItemGroup>
 
   <!-- Not transitive through a ProjectReference; needed to construct PowerTrade fixtures. -->
