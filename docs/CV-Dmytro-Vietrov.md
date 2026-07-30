@@ -1,14 +1,14 @@
 # Dmytro Vietrov
 
-**.NET Software Engineer | Infrastructure Automation**
+**.NET Software Engineer | AI & Cloud Engineering**
 
-📍 Paterna, Valencia, Spain (Permanent Resident) · 📞 +34 603 963 377 · ✉️ dmitriy.vetrov@gmail.com · 🔗 [linkedin.com/in/dmvietrov](https://www.linkedin.com/in/dmvietrov)
+Paterna, Valencia, Spain (Permanent Resident) · +34 603 963 377 · dmitriy.vetrov@gmail.com · [linkedin.com/in/dmvietrov](https://www.linkedin.com/in/dmvietrov)
 
 ---
 
 ## Professional Summary
 
-.NET Software Engineer with 8+ years building backend and full-stack systems in C# / .NET — REST APIs, services, web applications, and data layers. Strong with ASP.NET Core, Entity Framework, and SQL, deploying to the cloud and operating workloads in Kubernetes. My background combines .NET engineering with hands-on DevOps (Terraform, CI/CD) and enterprise system modernization.
+.NET Software Engineer with 8+ years building backend and full-stack systems in C# / .NET — REST APIs, services, web applications, and data layers. Strong with ASP.NET Core, Entity Framework, and SQL, deploying to the cloud and operating workloads in Kubernetes. Recently focused on applied AI engineering — building agentic and multi-agent systems, RAG pipelines, and LLM-powered document processing, and driving AI-assisted development across the full software lifecycle. My background combines this .NET and AI engineering with hands-on DevOps (Terraform, CI/CD) and enterprise system modernization.
 
 ---
 
@@ -26,7 +26,7 @@ Hands-on experience across several AI directions:
   - **Search Agent** — finds relevant vacancies on 10+ job platforms based on résumé requirements.
   - **Ranking Agent** — scores and classifies vacancies by match level (high / medium / low).
   - **Reporting Agent** — aggregates results and produces structured reports.
-  - Integrated **Playwright** for browser automation, **MCP connectors**, **Gmail** integration, and automatic web-form filling driven by a knowledge base (salary expectations, language proficiency, work experience, etc.).
+  - Integrated **Playwright** for browser automation, **MCP connectors**, **Gmail** integration, and automatic web-form filling driven by a knowledge base (salary expectations, language proficiency, work experience, etc.) — [github.com/DmitriyVetrov/job-hunter](https://github.com/DmitriyVetrov/job-hunter).
 
 - **Microsoft Agent Framework** — currently exploring it for a chatbot and a lightweight RAG, specifically as a native, enterprise-grade approach to agent development in C# / .NET from Microsoft.
 
