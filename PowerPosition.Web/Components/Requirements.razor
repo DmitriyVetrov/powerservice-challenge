@@ -1,22 +1,7 @@
 @page "/requirements"
-@using Markdig
+@inject IMarkdownDocumentProvider Documents
 
 <PageTitle>Requirements · PowerPosition</PageTitle>
 
 @* The document carries its own top-level heading, so the page adds none. *@
-<article>@Html</article>
-
-@code {
-    // Rendered once per process; docs/requirements.md is embedded by the csproj.
-    private static readonly MarkupString Html = Render();
-
-    private static MarkupString Render()
-    {
-        using var stream = typeof(Program).Assembly.GetManifestResourceStream("PowerPosition.Web.requirements.md")!;
-        using var reader = new StreamReader(stream);
-
-        // Advanced extensions cover the pipe tables; the document needs no raw HTML.
-        var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().DisableHtml().Build();
-        return new MarkupString(Markdown.ToHtml(reader.ReadToEnd(), pipeline));
-    }
-}
+<article>@Documents.Render(MarkdownDocument.Requirements)</article>

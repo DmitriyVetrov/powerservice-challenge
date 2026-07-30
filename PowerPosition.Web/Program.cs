@@ -1,5 +1,6 @@
 using PowerPosition.Web.Components;
 using PowerPosition.Web.Configuration;
+using PowerPosition.Web.Documents;
 using PowerPosition.Web.Reports;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ builder.Services
 
 builder.Services.AddSingleton<ICsvReportParser, CsvReportParser>();
 builder.Services.AddSingleton<IReportCatalog, ReportCatalog>();
+builder.Services.AddSingleton<IMarkdownDocumentProvider, EmbeddedMarkdownDocumentProvider>();
 
 var app = builder.Build();
 
