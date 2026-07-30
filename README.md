@@ -1,5 +1,11 @@
 # Coding Challenge: Power Position report
 
+> ### 🚀 Blazor Server web application
+>
+> A **Blazor Server web application** for this challenge lives in a separate branch:
+> **[`feature/blazor-frontend`](https://github.com/DmitriyVetrov/powerservice-challenge/tree/feature/blazor-frontend)**.
+> It adds a web UI on top of the worker service — check it out there.
+
 ## Overview Requirements 
 
 **Intra-day Day-Ahead Power Position Report** — Developed a .NET 10 Worker Service that generates automated day-ahead power position reports for energy traders. The service runs on a configurable schedule (and once at startup), retrieves day-ahead trades from the trading system, aggregates power volumes by delivery hour, and exports the results to CSV files `PowerPosition_yyyyMMdd_HHmm.csv` using the local extraction time. Implemented configurable scheduling, background processing, dependency injection, logging, and robust error handling to ensure reliable automated report generation. See full [requirements](https://github.com/DmitriyVetrov/powerservice-challenge/blob/main/docs/requirements.md)
