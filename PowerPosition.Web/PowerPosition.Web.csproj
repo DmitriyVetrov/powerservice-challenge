@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <!-- One authored copy in /docs; embedding ships it with the app, in dev and when published. -->
-    <EmbeddedResource Include="..\docs\requirements.md" LogicalName="PowerPosition.Web.requirements.md" />  </ItemGroup>
+    <EmbeddedResource Include="..\docs\requirements.md" LogicalName="PowerPosition.Web.requirements.md" />
+    <EmbeddedResource Include="..\docs\CV-Dmytro-Vietrov.md" LogicalName="PowerPosition.Web.cv.md" />  </ItemGroup>
 
 </Project>

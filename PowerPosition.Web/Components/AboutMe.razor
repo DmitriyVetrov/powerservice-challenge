@@ -1,7 +1,7 @@
 @page "/about-me"
+@inject IMarkdownDocumentProvider Documents
 
 <PageTitle>About Me · PowerPosition</PageTitle>
 
-<h1>About Me</h1>
-
-<p>Placeholder — the CV document will be integrated here in a later stage.</p>
+@* The CV carries its own top-level heading, so the page adds none. *@
+<article>@Documents.Render(MarkdownDocument.Cv)</article>
