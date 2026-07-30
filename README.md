@@ -63,20 +63,13 @@ dotnet publish PowerPosition.Worker -o out
 
 A Blazor app (`PowerPosition.Web`) with a top navigation bar over three pages:
 
-| Page | Route | Contents |
-|---|---|---|
-| Home | `/` | Report browser — the worker's CSV extracts, plotted (see [Reading the extracts](#reading-the-extracts)). |
-| Requirements | `/requirements` | `docs/requirements.md`, rendered to HTML with [Markdig](https://github.com/xoofx/markdig). |
-| About Me | `/about-me` | `docs/CV-Dmytro-Vietrov.md`, rendered the same way. |
+![The Home page: the report list on the left, the selected extract plotted on the right](docs/images/home.png)
 
 ```
 dotnet run --project PowerPosition.Web
 ```
 
-Then open http://localhost:5195. Both documents are embedded into the assembly
-from `/docs` at build time (see the csproj) and served through
-`IMarkdownDocumentProvider`, so there is one authored copy of each and it works
-both from `dotnet run` and from a published build.
+Then open http://localhost:5195.
 
 Requirements and About Me are rendered on the server as static HTML. Home is the
 one interactive component (`@rendermode InteractiveServer`), because selecting a
